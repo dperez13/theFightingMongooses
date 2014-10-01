@@ -15,7 +15,7 @@ MODULE_LICENSE("Dual BSD/GPL");
 
 static int mydate_seq_show(struct seq_file *s, void *v)
 {
-	int hour,min,sec,year,temp;
+	int hour,min,sec,year,mon,temp;
 	struct timeval time; 
 	struct tm alltime;
 	do_gettimeofday(&time);
@@ -23,10 +23,11 @@ static int mydate_seq_show(struct seq_file *s, void *v)
 	time_to_tm(temp,0, &alltime);
 	sec = temp%60;
 	min = (temp/60)%60;
-	hour = (temp/3600)%24;
+	hour = (temp/3600)%24 -4;
+    mon = alltime.tm_mon + 1;
 	year = 1900+alltime.tm_year;	//See tm specification, the year is stored as "years since 1900"
 
-	seq_printf(s, "%d-%d-%d %d:%d:%d\n", year, alltime.tm_mon, alltime.tm_mday, hour, min, sec);
+	seq_printf(s, "%d-%02d-%02d %02d:%02d:%02d\n", year, mon, alltime.tm_mday, hour, min, sec);
 	return 0;
 }
 static int mydate_proc_open(struct inode *inode, struct  file *file) {
