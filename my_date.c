@@ -23,7 +23,7 @@ static int mydate_seq_show(struct seq_file *s, void *v)
 	time_to_tm(temp,0, &alltime);
 	sec = temp%60;
 	min = (temp/60)%60;
-	hour = (temp/3600)%24 - (sys_tz.tz_minuteswest*60);
+	hour = (temp/3600)%24 - (sys_tz.tz_minuteswest/60);
     if(hour < 0)
         hour = hour + 24;
     mon = alltime.tm_mon + 1;
