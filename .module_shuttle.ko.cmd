@@ -1,0 +1,1 @@
+cmd_/home/david/Desktop/theFightingMongooses/module_shuttle.ko := ld -r -m elf_x86_64 -T /home/david/Downloads/linux-3.13.0/scripts/module-common.lds --build-id  -o /home/david/Desktop/theFightingMongooses/module_shuttle.ko /home/david/Desktop/theFightingMongooses/module_shuttle.o /home/david/Desktop/theFightingMongooses/module_shuttle.mod.o
