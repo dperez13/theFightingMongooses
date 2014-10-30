@@ -29,9 +29,9 @@ __attribute__((section("__versions"))) = {
 	{ 0xa1346a90, __VMLINUX_SYMBOL_STR(STUB_start_shuttle) },
 	{ 0x750a30, __VMLINUX_SYMBOL_STR(STUB_stop_shuttle) },
 	{ 0xf9a482f9, __VMLINUX_SYMBOL_STR(msleep) },
+	{ 0x27e1a049, __VMLINUX_SYMBOL_STR(printk) },
 	{ 0xa8b94eb8, __VMLINUX_SYMBOL_STR(mutex_unlock) },
 	{ 0xc09b4964, __VMLINUX_SYMBOL_STR(mutex_lock) },
-	{ 0x27e1a049, __VMLINUX_SYMBOL_STR(printk) },
 	{ 0xa05f372e, __VMLINUX_SYMBOL_STR(seq_printf) },
 	{ 0x6fdd98fa, __VMLINUX_SYMBOL_STR(single_open) },
 	{ 0xbdfb6dbb, __VMLINUX_SYMBOL_STR(__fentry__) },
@@ -43,4 +43,4 @@ __attribute__((section(".modinfo"))) =
 "depends=";
 
 
-MODULE_INFO(srcversion, "BF438237EC5DDE2D99977E8");
+MODULE_INFO(srcversion, "2629A5B56711B3928C71B31");

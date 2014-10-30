@@ -70,22 +70,17 @@ int get_passenger_val(int);
 
 void init_arrays(void){
     int i,j,k;
-
-
     for(i=0; i<5;i++){
         for(j=0; j<3;j++){
             passengers[i][j]=0;
             passengersdelivered[i][j]=0;
 
         }
-
         for(j=0;j<5;j++){
             for(k=0;k<3;k++){
                 passengerqueue[i][j][k] = 0;
             }
         }
-
-
     }
 }
 
@@ -100,34 +95,29 @@ int start_shuttle(void){
     if(shuttle_stop_status !=0){
         return 1;
     }
-
     curr_loc = 2;
     status = 2;
-
     return 0;
 } 
 
 
 int issue_request(char passenger_type, int initial_terminal, 
     int destination_terminal){
-
     int passenger_val = 0;
 
-    if(passenger_type != 'C' || passenger_type != 'A' ||
+    if(passenger_type != 'C' && passenger_type != 'A' &&
         passenger_type != 'L'){
 
         return 1;
     }
-
     if(initial_terminal >5 || initial_terminal <1){
         return 1;
     }
 
-    if(destination_terminal > 5 || initial_terminal < 1){
+    if(destination_terminal > 5 || destination_terminal < 1){
         return 1;
     }
     mutex_lock(&m);
-
     switch(passenger_type){
         case 'C':
 
@@ -151,8 +141,8 @@ int issue_request(char passenger_type, int initial_terminal,
 
     return 0;
 }
-
-int shuttle_run_thread(void){
+//changed from int shuttle_run_thread, as nothing was being returned. 
+void shuttle_run_thread(void){
     while(shuttle_stop_status == 1){
         if(dest_loc>=0)
         {
@@ -222,13 +212,9 @@ int shuttle_run_thread(void){
             mutex_unlock(&m);
 
         }
-
         dest_loc = get_next_destination();
         status = 1;
         msleep(time_to_get_somewhere(curr_loc, dest_loc));
-
-
-
     }
 }
 
@@ -259,9 +245,7 @@ int get_next_destination(void){
     int dest_loc = 0;
 
     if(seats_used>0){
-
         dest_loc = find_highest_destination();
-
     }
     else
         dest_loc = find_terminal_with_most();
@@ -344,8 +328,7 @@ int get_chd_passengers(void){
    // int j;
 
     for(i=0;i<5;i++){
-       totpass+=passengers[i][0];
-        
+       totpass+=passengers[i][0];        
     }
     return totpass;
 }
@@ -414,22 +397,20 @@ int get_tot_passengers_del(void){
     return totpass;
 }
 
-
-
 static int shuttle_seq_show(struct seq_file *s, void *v){
 
     int moving = shuttle_stop_status;
     if(shuttle_stop_status == -1){
-        seq_printf(s, "Status: DEACTIVATING");
+        seq_printf(s, "Status: DEACTIVATING\n");
     }
     else if(moving == 0){
-        seq_printf(s, "Status: PARKED");
+        seq_printf(s, "Status: PARKED\n");
     }
     else if(moving == 1){
-        seq_printf(s, "Status: MOVING");
+        seq_printf(s, "Status: MOVING\n");
     }
     else if(moving == -1){
-        seq_printf(s, "Status: OFFLINE");
+        seq_printf(s, "Status: OFFLINE\n");
     }
 
 
@@ -441,15 +422,15 @@ static int shuttle_seq_show(struct seq_file *s, void *v){
 
     seq_printf(s, "Passengers: %d (%d adult with luggage, %d adult without luggage, %d children)", tot_passengers, chd_passengers, awl_passengers, aol_passengers);
 
-    seq_printf(s, "Location: %d", curr_loc+1);
-    seq_printf(s, "Destination: %d", dest_loc+1);
+    seq_printf(s, "\nLocation: %d", curr_loc+1);
+    seq_printf(s, "\nDestination: %d", dest_loc+1);
 
     int tot_passengersd = get_tot_passengers_del();
     int chd_passengersd = get_chd_passengers_del();
     int awl_passengersd = get_awl_passengers_del();
     int aol_passengersd = get_awol_passengers_del();
 
-    seq_printf(s, "Delivered: %d (%d adult with luggage, %d adult without luggage, %d children)", tot_passengersd, chd_passengersd, awl_passengersd, aol_passengersd);
+    seq_printf(s, "Delivered: %d (%d adult with luggage, %d adult without luggage, %d children)\n", tot_passengersd, chd_passengersd, awl_passengersd, aol_passengersd);
 
     return 0;
 }
@@ -466,15 +447,13 @@ static const struct file_operations shuttle_proc_fops = {
 };
 
 
-
-
 static int my_module_init(void) {
         
         //STUB_test_newsyscall=my_test_newsyscall;
 
-        STUB_stop_shuttle =  &(stop_shuttle);
-        STUB_start_shuttle = &(start_shuttle);
-        STUB_issue_request = &(issue_request);
+        STUB_stop_shuttle = (stop_shuttle);
+        STUB_start_shuttle =(start_shuttle);
+        STUB_issue_request =(issue_request);
 
         kthrd = kthread_run(&shuttle_run_thread, NULL, "thread1");
         proc_create(PROC_NAME, 0, NULL, &shuttle_proc_fops);
